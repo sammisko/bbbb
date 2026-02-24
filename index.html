@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Simple Messages</title>
+	<style>
+		:root {
+			--bg: #050816;
+			--bg-light: #0f172a;
+			--accent: #38bdf8;
+			--accent-soft: rgba(56, 189, 248, 0.1);
+			--text: #e5e7eb;
+			--text-muted: #9ca3af;
+			--danger: #f97373;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			background: radial-gradient(circle at top, #1e293b 0, #020617 45%, #000 100%);
+			color: var(--text);
+		}
+
+		.app {
+			width: 100%;
+			max-width: 900px;
+			height: 90vh;
+			max-height: 720px;
+			background: linear-gradient(145deg, #020617, #020617 40%, #020617 100%);
+			border-radius: 20px;
+			border: 1px solid rgba(148, 163, 184, 0.15);
+			box-shadow:
+				0 24px 80px rgba(15, 23, 42, 0.9),
+				0 0 0 1px rgba(15, 23, 42, 0.9);
+			display: flex;
+			overflow: hidden;
+		}
+
+		.sidebar {
+			width: 260px;
+			background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 60%),
+						radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.18), transparent 55%),
+						#020617;
+			border-right: 1px solid rgba(148, 163, 184, 0.18);
+			padding: 18px 18px 16px;
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+		}
+
+		.logo-row {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+		}
+
+		.logo-mark {
+			width: 34px;
+			height: 34px;
+			border-radius: 12px;
+			background:
+				conic-gradient(from 210deg, #38bdf8, #a855f7, #f97316, #38bdf8);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.8), 0 12px 30px rgba(15, 23, 42, 0.9);
+		}
+
+		.logo-mark span {
+			font-size: 18px;
+			font-weight: 800;
+			color: #0b1220;
+		}
+
+		.logo-text {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+		}
+
+		.logo-text h1 {
+			margin: 0;
+			font-size: 16px;
+			font-weight: 600;
+			letter-spacing: 0.03em;
+		}
+
+		.logo-text span {
+			font-size: 11px;
+			color: var(--text-muted);
+		}
+
+		.pill {
+			padding: 4px 10px;
+			border-radius: 999px;
+			border: 1px solid rgba(148, 163, 184, 0.4);
+			background: rgba(15, 23, 42, 0.85);
+			font-size: 11px;
+			color: var(--text-muted);
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.pill-dot {
+			width: 6px;
+			height: 6px;
+			border-radius: 999px;
+			background: #22c55e;
+		}
+
+		.panel {
+			background: rgba(15, 23, 42, 0.85);
+			border-radius: 14px;
+			padding: 10px 10px 12px;
+			border: 1px solid rgba(148, 163, 184, 0.25);
+		}
+
+		.panel h2 {
+			margin: 0 0 6px;
+			font-size: 13px;
+			font-weight: 600;
+			color: #e5e7eb;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.panel h2 span {
+			font-size: 11px;
+			font-weight: 400;
+			color: var(--text-muted);
+		}
+
+		label {
+			display: block;
+			font-size: 11px;
+			color: var(--text-muted);
+			margin-bottom: 4px;
+		}
+
+		input[type="text"] {
+			width: 100%;
+			padding: 7px 9px;
+			border-radius: 9px;
+			border: 1px solid rgba(148, 163, 184, 0.4);
+			background: rgba(15, 23, 42, 0.9);
+			color: var(--text);
+			font-size: 13px;
+			outline: none;
+			transition: border-color 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+		}
+
+		input[type="text"]:focus {
+			border-color: rgba(56, 189, 248, 0.9);
+			box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+			background: #020617;
+		}
+
+		.hint {
+			margin-top: 4px;
+			font-size: 10px;
+			color: var(--text-muted);
+		}
+
+		.stats {
+			display: flex;
+			gap: 8px;
+			margin-top: 8px;
+		}
+
+		.stat-chip {
+			flex: 1 1 auto;
+			padding: 6px 7px;
+			border-radius: 999px;
+			border: 1px solid rgba(148, 163, 184, 0.35);
+			background: rgba(15, 23, 42, 0.9);
+			font-size: 11px;
+			color: var(--text-muted);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.stat-chip strong {
+			color: #e5e7eb;
+			font-weight: 500;
+		}
+
+		.danger-text {
+			margin-top: 6px;
+			font-size: 10px;
+			color: #fecaca;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.danger-dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 999px;
+			background: rgba(248, 113, 113, 0.9);
+		}
+
+		.sidebar-footer {
+			margin-top: auto;
+			font-size: 10px;
+			color: var(--text-muted);
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.sidebar-footer small {
+			opacity: 0.8;
+		}
+
+		.sidebar-footer a {
+			color: #60a5fa;
+			text-decoration: none;
+		}
+
+		.sidebar-footer a:hover {
+			text-decoration: underline;
+		}
+
+		.main {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.2), transparent 55%),
+						radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.25), transparent 55%),
+						#020617;
+		}
+
+		.main-header {
+			padding: 14px 18px 12px;
+			border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.room-title {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+		}
+
+		.room-title span {
+			font-size: 11px;
+			color: var(--text-muted);
+		}
+
+		.room-title strong {
+			font-size: 14px;
+			letter-spacing: 0.04em;
+		}
+
+		.badge-row {
+			display: flex;
+			gap: 8px;
+		}
+
+		.badge {
+			padding: 5px 9px;
+			border-radius: 999px;
+			border: 1px solid rgba(148, 163, 184, 0.4);
+			font-size: 11px;
+			color: var(--text-muted);
+			background: rgba(15, 23, 42, 0.9);
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.badge-accent {
+			border-color: rgba(56, 189, 248, 0.85);
+			background: rgba(15, 23, 42, 0.95);
+			color: #e0f2fe;
+		}
+
+		.messages {
+			flex: 1;
+			padding: 14px 18px 8px;
+			overflow-y: auto;
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		.messages::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		.messages::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		.messages::-webkit-scrollbar-thumb {
+			background: rgba(30, 64, 175, 0.7);
+			border-radius: 999px;
+		}
+
+		.day-divider {
+			text-align: center;
+			margin: 8px 0;
+		}
+
+		.day-divider span {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 10px;
+			color: rgba(148, 163, 184, 0.9);
+			padding: 3px 10px;
+			border-radius: 999px;
+			border: 1px solid rgba(148, 163, 184, 0.45);
+			background: rgba(15, 23, 42, 0.95);
+		}
+
+		.day-divider span::before,
+		.day-divider span::after {
+			content: '';
+			width: 14px;
+			height: 1px;
+			background: linear-gradient(to right, transparent, rgba(148, 163, 184, 0.8));
+		}
+
+		.day-divider span::after {
+			background: linear-gradient(to right, rgba(148, 163, 184, 0.8), transparent);
+		}
+
+		.message-row {
+			display: flex;
+			gap: 8px;
+			align-items: flex-end;
+		}
+
+		.message-row.own {
+			justify-content: flex-end;
+		}
+
+		.avatar {
+			width: 26px;
+			height: 26px;
+			border-radius: 999px;
+			background: radial-gradient(circle at 30% 20%, #facc15, #f97316 40%, #7c3aed 80%);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 11px;
+			font-weight: 700;
+			color: #020617;
+			box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.85);
+		}
+
+		.avatar-alt {
+			background: radial-gradient(circle at 30% 20%, #38bdf8, #22c55e 55%, #0ea5e9 90%);
+		}
+
+		.bubble-group {
+			max-width: 72%;
+			display: flex;
+			flex-direction: column;
+			gap: 3px;
+		}
+
+		.meta {
+			font-size: 10px;
+			color: rgba(148, 163, 184, 0.9);
+		}
+
+		.meta span {
+			opacity: 0.9;
+		}
+
+		.bubble {
+			position: relative;
+			padding: 8px 10px 7px;
+			border-radius: 14px 14px 14px 4px;
+			background: rgba(15, 23, 42, 0.96);
+			border: 1px solid rgba(148, 163, 184, 0.5);
+			font-size: 13px;
+			line-height: 1.35;
+			color: #e5e7eb;
+			backdrop-filter: blur(6px);
+			word-wrap: break-word;
+			white-space: pre-wrap;
+		}
+
+		.message-row.own .bubble {
+			border-radius: 14px 14px 4px 14px;
+			background: linear-gradient(135deg, rgba(56, 189, 248, 0.13), rgba(129, 140, 248, 0.18));
+			border-color: rgba(56, 189, 248, 0.8);
+		}
+
+		.bubble small {
+			display: block;
+			margin-top: 4px;
+			font-size: 10px;
+			color: rgba(148, 163, 184, 0.9);
+		}
+
+		.system-message {
+			align-self: center;
+			font-size: 10px;
+			margin: 4px 0 8px;
+			color: rgba(148, 163, 184, 0.9);
+		}
+
+		.system-chip {
+			padding: 4px 9px;
+			border-radius: 999px;
+			border: 1px dashed rgba(148, 163, 184, 0.7);
+			background: rgba(15, 23, 42, 0.9);
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.system-dot {
+			width: 6px;
+			height: 6px;
+			border-radius: 999px;
+			background: rgba(56, 189, 248, 0.9);
+		}
+
+		.input-bar {
+			padding: 8px 10px 10px;
+			border-top: 1px solid rgba(148, 163, 184, 0.35);
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			background: rgba(15, 23, 42, 0.98);
+		}
+
+		.input-row {
+			display: flex;
+			gap: 8px;
+		}
+
+		textarea {
+			flex: 1;
+			resize: none;
+			padding: 8px 10px;
+			border-radius: 10px;
+			border: 1px solid rgba(148, 163, 184, 0.5);
+			background: rgba(15, 23, 42, 0.96);
+			color: var(--text);
+			font-size: 13px;
+			min-height: 40px;
+			max-height: 92px;
+			line-height: 1.3;
+			outline: none;
+			transition: border-color 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+		}
+
+		textarea:focus {
+			border-color: rgba(56, 189, 248, 0.9);
+			box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.35);
+			background: #020617;
+		}
+
+		button {
+			border: none;
+			border-radius: 10px;
+			padding: 0 14px;
+			font-size: 13px;
+			font-weight: 500;
+			cursor: pointer;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			background: radial-gradient(circle at top left, #38bdf8, #4f46e5 55%, #0ea5e9 100%);
+			color: #e5e7eb;
+			box-shadow: 0 10px 25px rgba(15, 23, 42, 0.8);
+			min-width: 90px;
+			transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s ease;
+		}
+
+		button:hover {
+			filter: brightness(1.05);
+			box-shadow: 0 14px 34px rgba(15, 23, 42, 0.85);
+		}
+
+		button:active {
+			transform: translateY(1px) scale(0.99);
+			box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+		}
+
+		button:disabled {
+			opacity: 0.45;
+			cursor: default;
+			box-shadow: none;
+		}
+
+		.input-meta {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			font-size: 10px;
+			color: var(--text-muted);
+		}
+
+		.input-meta span {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.status-dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 999px;
+			background: rgba(56, 189, 248, 0.9);
+			box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+		}
+
+		.error-text {
+			color: #fecaca;
+		}
+
+		.clear-btn {
+			font-size: 10px;
+			padding: 4px 8px;
+			border-radius: 999px;
+			border: 1px solid rgba(148, 163, 184, 0.5);
+			background: rgba(15, 23, 42, 0.9);
+			color: rgba(148, 163, 184, 0.95);
+			cursor: pointer;
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+		}
+
+		.clear-btn:hover {
+			background: rgba(30, 64, 175, 0.7);
+			color: #e5e7eb;
+		}
+
+		/* Mobile layout */
+		@media (max-width: 720px) {
+			body {
+				padding: 8px;
+			}
+
+			.app {
+				flex-direction: column;
+				height: 100vh;
+				max-height: none;
+			}
+
+			.sidebar {
+				width: 100%;
+				border-right: none;
+				border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+				padding-bottom: 10px;
+			}
+
+			.panel {
+				margin-top: 4px;
+			}
+
+			.main-header {
+				padding: 10px 12px 8px;
+			}
+
+			.messages {
+				padding: 10px 12px 6px;
+			}
+
+			.input-bar {
+				padding: 8px 10px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="app">
+		<aside class="sidebar">
+			<div class="logo-row">
+				<div class="logo-mark"><span>M</span></div>
+				<div class="logo-text">
+					<h1>Messages</h1>
+					<span>Mini chat for GitHub Pages</span>
+				</div>
+				<div class="pill">
+					<span class="pill-dot"></span>
+					<span>online (Firebase)</span>
+				</div>
+			</div>
+
+			<div class="panel">
+				<h2>
+					Your profile
+					<span id="profileStatus">saved</span>
+				</h2>
+				<div style="display: flex; gap: 8px;">
+					<div style="flex: 1 1 auto;">
+						<label for="usernameInput">Name</label>
+						<input type="text" id="usernameInput" maxlength="18" placeholder="e.g. Sam" />
+						<div class="hint">This will show next to your messages.</div>
+					</div>
+				</div>
+
+				<div class="stats">
+					<div class="stat-chip">
+						<span>Messages</span>
+						<strong id="statMessages">0</strong>
+					</div>
+					<div class="stat-chip">
+						<span>Last day</span>
+						<strong id="statDay">Today</strong>
+					</div>
+				</div>
+
+				<div class="danger-text">
+					<span class="danger-dot"></span>
+					<span>Messages are stored online in Firebase. Anyone with
+						this page can see them.</span>
+				</div>
+			</div>
+
+			<div class="sidebar-footer">
+				<small>
+					Tip: Press <strong>Shift + Enter</strong> for a new line.
+				</small>
+				<small>
+					This page uses Firebase Realtime Database free tier.
+					Protect your API keys with security rules.
+				</small>
+			</div>
+		</aside>
+
+		<main class="main">
+			<header class="main-header">
+				<div class="room-title">
+					<span>Room</span>
+					<strong>#general</strong>
+				</div>
+				<div class="badge-row">
+					<div class="badge badge-accent">
+						<span class="status-dot"></span>
+						<span>Online room</span>
+					</div>
+					<div class="badge" id="storageBadge">Connecting…</div>
+				</div>
+			</header>
+
+			<section class="messages" id="messageList"></section>
+
+			<div class="system-message">
+				<div class="system-chip">
+					<span class="system-dot"></span>
+					<span id="systemHint">Only you can see these messages.</span>
+				</div>
+			</div>
+
+			<footer class="input-bar">
+				<div class="input-row">
+					<textarea
+						id="messageInput"
+						rows="2"
+						maxlength="700"
+						placeholder="Type a message and press Enter to send..."
+					></textarea>
+					<button id="sendButton" disabled>
+						<span>Send</span>
+					</button>
+				</div>
+				<div class="input-meta">
+					<span id="inputStatus">
+						<span class="status-dot"></span>
+						<span>Ready</span>
+					</span>
+					<span>
+						<button type="button" class="clear-btn" id="clearButton">
+							<span>Clear messages</span>
+						</button>
+					</span>
+				</div>
+			</footer>
+		</main>
+	</div>
+
+	<!-- Firebase SDKs (Compat) -->
+	<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+	<script>
+		(function () {
+			const PROFILE_KEY = 'mini-messages-profile-v1';
+
+			const usernameInput = document.getElementById('usernameInput');
+			const messageInput = document.getElementById('messageInput');
+			const sendButton = document.getElementById('sendButton');
+			const clearButton = document.getElementById('clearButton');
+			const messageList = document.getElementById('messageList');
+			const inputStatus = document.getElementById('inputStatus');
+			const systemHint = document.getElementById('systemHint');
+			const profileStatus = document.getElementById('profileStatus');
+			const statMessages = document.getElementById('statMessages');
+			const statDay = document.getElementById('statDay');
+			const storageBadge = document.getElementById('storageBadge');
+
+			let messages = [];
+			let profile = { username: '' };
+			let seenIds = new Set();
+			let firstLoad = true;
+
+			// TODO: Replace the YOUR_* values with your real values
+			// from the Firebase console (Project settings → General → Your apps → Web app → Config).
+			const firebaseConfig = {
+				apiKey: "AIzaSyCxYoIfJNSdxqmq4ldFCHcanO5O_a_Uczc", // from Firebase console
+				authDomain: "data-9c664.firebaseapp.com",
+				databaseURL: "https://data-9c664-default-rtdb.firebaseio.com",
+				projectId: "data-9c664",
+				storageBucket: "data-9c664.firebasestorage.app", // from Firebase console
+				messagingSenderId: "1030570143469", // from Firebase console
+				appId: "1:1030570143469:web:c637248dee1ee63963a6e4", // from Firebase console
+				measurementId: "G-523286531", // optional for Analytics
+			};
+
+			firebase.initializeApp(firebaseConfig);
+			const db = firebase.database();
+			const messagesRef = db.ref('rooms/general/messages');
+
+			function isLocalStorageAvailable() {
+				try {
+					const testKey = '__test__mini_messages';
+					window.localStorage.setItem(testKey, '1');
+					window.localStorage.removeItem(testKey);
+					return true;
+				} catch (e) {
+					return false;
+				}
+			}
+
+			const hasStorage = isLocalStorageAvailable();
+
+			function formatTime(date) {
+				const d = new Date(date);
+				return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			}
+
+			function formatDay(date) {
+				const d = new Date(date);
+				const now = new Date();
+				const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+				const that = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+
+				const diff = (today - that) / (1000 * 60 * 60 * 24);
+				if (diff === 0) return 'Today';
+				if (diff === 1) return 'Yesterday';
+				return d.toLocaleDateString();
+			}
+
+			function firstInitial(name) {
+				if (!name) return '?';
+				return name.trim().charAt(0).toUpperCase();
+			}
+
+			function loadProfile() {
+				if (!hasStorage) return;
+				try {
+					const rawProfile = window.localStorage.getItem(PROFILE_KEY);
+					if (rawProfile) {
+						const parsed = JSON.parse(rawProfile);
+						if (parsed && typeof parsed.username === 'string') {
+							profile = parsed;
+						}
+					}
+				} catch (e) {
+					console.warn('Could not load profile', e);
+				}
+			}
+
+			function saveProfile() {
+				if (!hasStorage) return;
+				try {
+					window.localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+					profileStatus.textContent = 'saved';
+				} catch (e) {
+					console.warn('Could not save profile', e);
+				}
+			}
+
+			function sendNotification(title, body) {
+				if (!('Notification' in window)) return;
+				if (Notification.permission !== 'granted') return;
+				try {
+					const n = new Notification(title, {
+						body,
+						icon: 'https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg',
+						tag: 'chat-message',
+					});
+					n.onclick = () => { window.focus(); n.close(); };
+				} catch (e) {
+					console.warn('Notification error', e);
+				}
+			}
+
+			function attachRealtimeListener() {
+				messagesRef.on(
+					'value',
+					(snapshot) => {
+						const data = snapshot.val() || {};
+						const list = [];
+						Object.keys(data).forEach((key) => {
+							list.push({ id: key, ...data[key] });
+						});
+						list.sort((a, b) => {
+							return String(a.createdAt || '').localeCompare(String(b.createdAt || ''));
+						});
+
+						if (!firstLoad) {
+							// Notify for any new messages not from the current user
+							list.forEach((msg) => {
+								if (!seenIds.has(msg.id) && msg.username !== profile.username) {
+									const preview = (msg.text || '').slice(0, 80);
+									sendNotification('💬 ' + (msg.username || 'Someone'), preview);
+								}
+							});
+						}
+
+						// Update seen set
+						list.forEach((msg) => seenIds.add(msg.id));
+						firstLoad = false;
+
+						messages = list;
+						render();
+					},
+					(error) => {
+						console.error('Firebase listener error', error);
+						storageBadge.textContent = 'Firebase error';
+						systemHint.textContent = 'Could not load messages from Firebase.';
+					}
+				);
+			}
+
+			function groupByDay(list) {
+				const groups = [];
+				let currentDay = null;
+				list.forEach((msg) => {
+					const d = new Date(msg.createdAt);
+					const key = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+					if (!currentDay || currentDay.key !== key) {
+						currentDay = { key, label: formatDay(d), items: [] };
+						groups.push(currentDay);
+					}
+					currentDay.items.push(msg);
+				});
+				return groups;
+			}
+
+			function render() {
+				messageList.innerHTML = '';
+
+				if (!messages.length) {
+					const empty = document.createElement('div');
+					empty.className = 'system-message';
+					empty.innerHTML =
+						'<div class="system-chip"><span class="system-dot"></span><span>No messages yet. Say hi! ✨</span></div>';
+					messageList.appendChild(empty);
+					statMessages.textContent = '0';
+					statDay.textContent = 'Today';
+					return;
+				}
+
+				const groups = groupByDay(messages);
+				groups.forEach((group) => {
+					const divider = document.createElement('div');
+					divider.className = 'day-divider';
+					const span = document.createElement('span');
+					span.textContent = group.label;
+					divider.appendChild(span);
+					messageList.appendChild(divider);
+
+					group.items.forEach((msg) => {
+						const own = profile.username && msg.username === profile.username;
+
+						const row = document.createElement('div');
+						row.className = 'message-row' + (own ? ' own' : '');
+
+						const avatar = document.createElement('div');
+						avatar.className = 'avatar' + (own ? ' avatar-alt' : '');
+						avatar.textContent = firstInitial(msg.username || '');
+
+						const groupEl = document.createElement('div');
+						groupEl.className = 'bubble-group';
+
+						const meta = document.createElement('div');
+						meta.className = 'meta';
+						meta.innerHTML =
+							'<span>' + (msg.username || 'Someone') + '</span> b7 <span>' +
+							formatTime(msg.createdAt) +
+							'</span>';
+
+						const bubble = document.createElement('div');
+						bubble.className = 'bubble';
+						bubble.textContent = msg.text;
+
+						groupEl.appendChild(meta);
+						groupEl.appendChild(bubble);
+
+						if (own) {
+							row.appendChild(groupEl);
+							row.appendChild(avatar);
+						} else {
+							row.appendChild(avatar);
+							row.appendChild(groupEl);
+						}
+
+						messageList.appendChild(row);
+					});
+				});
+
+				statMessages.textContent = String(messages.length);
+				const last = messages[messages.length - 1];
+				statDay.textContent = formatDay(last.createdAt);
+
+				requestAnimationFrame(() => {
+					messageList.scrollTop = messageList.scrollHeight;
+				});
+			}
+
+			function setInputState(message, isError) {
+				const label = inputStatus.querySelector('span:nth-child(2)');
+				const dot = inputStatus.querySelector('.status-dot');
+				if (!label || !dot) return;
+				label.textContent = message;
+				if (isError) {
+					label.classList.add('error-text');
+					dot.style.backgroundColor = 'rgba(248, 113, 113, 0.95)';
+					dot.style.boxShadow = '0 0 0 3px rgba(248, 113, 113, 0.3)';
+				} else {
+					label.classList.remove('error-text');
+					dot.style.backgroundColor = 'rgba(56, 189, 248, 0.9)';
+					dot.style.boxShadow = '0 0 0 3px rgba(56, 189, 248, 0.25)';
+				}
+			}
+
+			function handleSend() {
+				const raw = messageInput.value || '';
+				const text = raw.trim();
+				if (!text) {
+					setInputState('Type a message first.', true);
+					return;
+				}
+
+				if (!profile.username.trim()) {
+					setInputState('Set your name on the left first.', true);
+					usernameInput.focus();
+					return;
+				}
+
+				const now = new Date().toISOString();
+				const newMessage = {
+					username: profile.username.trim(),
+					text,
+					createdAt: now,
+				};
+
+				setInputState('Sending…', false);
+				sendButton.disabled = true;
+
+				messagesRef
+					.push(newMessage)
+					.then(() => {
+						messageInput.value = '';
+						setInputState('Sent', false);
+						setTimeout(() => setInputState('Ready', false), 800);
+						messageInput.focus();
+					})
+					.catch((error) => {
+						console.error('Error sending message', error);
+						setInputState('Error sending message', true);
+						sendButton.disabled = false;
+					});
+			}
+
+			function handleClear() {
+				if (!messages.length) return;
+				const ok = window.confirm('Clear all messages in this room for everyone?');
+				if (!ok) return;
+				messagesRef
+					.remove()
+					.then(() => {
+						setInputState('Messages cleared', false);
+						setTimeout(() => setInputState('Ready', false), 800);
+					})
+					.catch((error) => {
+						console.error('Error clearing messages', error);
+						setInputState('Error clearing messages', true);
+					});
+			}
+
+			function handleProfileChange() {
+				const value = (usernameInput.value || '').trim();
+				profile.username = value;
+				profileStatus.textContent = value ? 'saved' : 'required';
+				if (hasStorage) {
+					saveProfile();
+				}
+				render();
+			}
+
+			// Events
+			sendButton.addEventListener('click', handleSend);
+			clearButton.addEventListener('click', handleClear);
+
+			messageInput.addEventListener('keydown', (event) => {
+				if (event.key === 'Enter' && !event.shiftKey) {
+					event.preventDefault();
+					handleSend();
+				}
+			});
+
+			messageInput.addEventListener('input', () => {
+				const text = (messageInput.value || '').trim();
+				sendButton.disabled = !text;
+				if (text) {
+					setInputState('Press Enter to send', false);
+				} else {
+					setInputState('Ready', false);
+				}
+			});
+
+			usernameInput.addEventListener('input', () => {
+				profileStatus.textContent = 'saving...';
+			});
+
+			usernameInput.addEventListener('change', () => {
+				handleProfileChange();
+			});
+
+			usernameInput.addEventListener('blur', () => {
+				handleProfileChange();
+			});
+
+			// Bootstrap
+			if ('Notification' in window && Notification.permission === 'default') {
+				Notification.requestPermission();
+			}
+
+			loadProfile();
+			if (profile.username) {
+				usernameInput.value = profile.username;
+				profileStatus.textContent = 'saved';
+			} else {
+				profileStatus.textContent = 'required';
+			}
+			storageBadge.textContent = 'Using Firebase';
+			systemHint.textContent = 'Messages are synced online via Firebase (free tier).';
+			attachRealtimeListener();
+		})();
+	</script>
+</body>
+</html>
